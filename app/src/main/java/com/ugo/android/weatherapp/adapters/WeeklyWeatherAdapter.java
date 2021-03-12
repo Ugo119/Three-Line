@@ -24,9 +24,9 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
     private WeeklyWeatherResponse weeklyWeatherResponse;
 
 
-    public WeeklyWeatherAdapter(WeatherClickListener weatherClickListener, ArrayList<MajorCities> majorCitiesList, ArrayList<Daily> dailyList) {
+    public WeeklyWeatherAdapter(WeeklyWeatherResponse weeklyWeatherResponse, ArrayList<MajorCities> majorCitiesList, ArrayList<Daily> dailyList) {
         this.majorCitiesList = majorCitiesList;
-        this.weatherClickListener = weatherClickListener;
+        this.weeklyWeatherResponse = weeklyWeatherResponse;
         this.dailyList = dailyList;
     }
 

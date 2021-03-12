@@ -11,7 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 
+import com.ugo.android.weatherapp.MainActivity;
 import com.ugo.android.weatherapp.R;
+import com.ugo.android.weatherapp.models.CityName;
 import com.ugo.android.weatherapp.models.MajorCities;
 import com.ugo.android.weatherapp.response.CurrentWeatherResponse;
 
@@ -20,9 +22,12 @@ public class CurrentDayWeatherFragment extends Fragment {
     description;
     CurrentWeatherResponse currentWeatherResponse;
     MajorCities majorCities;
+    private CityName city;
+    MainActivity mainActivity;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_current_day_weather, container, false);
     }
 
@@ -33,23 +38,31 @@ public class CurrentDayWeatherFragment extends Fragment {
     }
 
     public void initView(View view) {
+        mainActivity = (MainActivity) getActivity();
+        city = mainActivity.cityName;
+        Log.e("TAG", "initView_GETSAVED: " + city.getCityName());
         Bundle bundle = getArguments();
         if (bundle != null) {
             currentWeatherResponse = (CurrentWeatherResponse) bundle.getSerializable("current");
-            majorCities = (MajorCities) bundle.getSerializable("city");
-            Log.e("TAG", "initView_RESP: " + currentWeatherResponse);
+            majorCities = (MajorCities) bundle.getSerializable("key");
+            Log.e("TAG", "initView_RESP: " + majorCities.getCityName());
+            //cityName.setText(city.getCityName());
+
             Log.e("TAG", "initView_MAIN: " + currentWeatherResponse.getMain());
         }
+
         feelslikeTemperature = view.findViewById(R.id.feelslikeTemperature);
         humidity = view.findViewById(R.id.humidity);
         wind = view.findViewById(R.id.wind);
         uvIndex = view.findViewById(R.id.uvIndex);
         temperature = view.findViewById(R.id.temperature);
-        cityName = view.findViewById(R.id.cityCountry);
+        cityName = view.findViewById(R.id.cityName);
         icon = view.findViewById(R.id.icon);
         description = view.findViewById(R.id.description);
 
-        //cityName.setText(majorCities.getCityName());
+        cityName.setText(city.getCityName());
+
+
 
 //        if (currentWeatherResponse != null) {
 //            Log.e("TAG", "initView_TEMP: " + currentWeatherResponse.getMain().getTemp());

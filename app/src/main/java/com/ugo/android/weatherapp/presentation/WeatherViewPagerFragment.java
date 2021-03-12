@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.ugo.android.weatherapp.MainActivity;
 import com.ugo.android.weatherapp.R;
 import com.ugo.android.weatherapp.adapters.WeatherViewPagerAdapter;
+import com.ugo.android.weatherapp.models.CityName;
 import com.ugo.android.weatherapp.models.Daily;
 import com.ugo.android.weatherapp.models.Main;
 import com.ugo.android.weatherapp.models.MajorCities;
@@ -54,23 +55,31 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
     public static DisposableObserver<CurrentWeatherResponse> request;
     public static DisposableObserver<WeeklyWeatherResponse> weekRequest;
     private ArrayList<Daily> dailyList;
+    private CityName cityName;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         dailyList = new ArrayList<>();
+
         return inflater.inflate(R.layout.fragment_current_weekly_weather_tab, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mainActivity = (MainActivity) getActivity();
+        cityName = mainActivity.cityName;
         apikey = RetrofitFactory.API_KEY;
         bundle = getArguments();
         if (bundle != null) {
             majorCities = (MajorCities) bundle.getSerializable("key");
             lat = majorCities.getLatitude();
             lon = majorCities.getLongitude();
+
+            cityName.setCityName(majorCities.getCityName());
+            Log.e("TAG", "onViewCreated_SAVE: " + cityName.getCityName());
         }
         fetchCurrentWeatherData(lat, lon, apikey);
         fetchWeeklyWeatherData(lat,lon,apikey);
@@ -89,15 +98,15 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
         fragmentArrayList = new ArrayList<>();
         mFragmentTitleList = new ArrayList<>();
 
-
-        Bundle cityBundle = new Bundle();
-        cityBundle.putSerializable("city", majorCities);
+        Log.e("TAG", "initView_VP: " + majorCities.getCityName());
+        bundle.putSerializable("key", majorCities);
         CurrentDayWeatherFragment currentDayWeatherFragment = new CurrentDayWeatherFragment();
-        currentDayWeatherFragment.setArguments(cityBundle);
+        currentDayWeatherFragment.setArguments(bundle);
         fragmentArrayList.add(currentDayWeatherFragment);
         mFragmentTitleList.add(getActivity().getResources().getString(R.string.today));
 
         WeeklyWeatherFragment weeklyWeatherFragment = new WeeklyWeatherFragment();
+        weeklyWeatherFragment.setArguments(bundle);
         fragmentArrayList.add(weeklyWeatherFragment);
         mFragmentTitleList.add(getActivity().getResources().getString(R.string.weekly));
 
@@ -215,7 +224,7 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
                             icon = WeeklyWeatherFragment.icon;
                             description = WeeklyWeatherFragment.description;
 
-                            WeeklyWeatherFragment.displayWeatherData(temperature, icon, description, response, currentWeatherResponse);
+                            WeeklyWeatherFragment.displayWeatherData(temperature, icon, description, response);
 
 //                            AppCompatTextView feelslikeTemperature, humidity, wind, uvIndex, temperature,
 //                                    icon, description ;

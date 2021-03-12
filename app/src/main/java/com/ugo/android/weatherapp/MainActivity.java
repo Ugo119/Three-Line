@@ -8,17 +8,20 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 
+import com.ugo.android.weatherapp.models.CityName;
 import com.ugo.android.weatherapp.presentation.CountriesListFragment;
 
 public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     CountriesListFragment countriesListFragment;
+    public CityName cityName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         countriesListFragment = new CountriesListFragment();
+        cityName = new CityName();
         replaceFragment(countriesListFragment, true);
 //        fragmentManager = getSupportFragmentManager();
 //        fragmentManager.beginTransaction()
