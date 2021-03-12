@@ -52,8 +52,6 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
         if (bundle != null) {
             currentWeatherResponse = (CurrentWeatherResponse) bundle.getSerializable("current");
             majorCities = (MajorCities) bundle.getSerializable("city");
-            Log.e("TAG", "initView_RESP: " + currentWeatherResponse);
-            Log.e("TAG", "initView_MAIN: " + currentWeatherResponse.getMain());
         }
 
         weeklyweatherRecyclerView = view.findViewById(R.id.weeklyweatherRecyclerView);
