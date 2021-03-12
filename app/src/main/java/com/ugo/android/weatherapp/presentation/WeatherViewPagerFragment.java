@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.ugo.android.weatherapp.MainActivity;
 import com.ugo.android.weatherapp.R;
 import com.ugo.android.weatherapp.adapters.WeatherViewPagerAdapter;
+import com.ugo.android.weatherapp.models.Daily;
 import com.ugo.android.weatherapp.models.Main;
 import com.ugo.android.weatherapp.models.MajorCities;
 import com.ugo.android.weatherapp.network.ApiService;
@@ -46,15 +47,18 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
     private double lon;
     private String apikey;
     private CurrentWeatherResponse currentWeatherResponse;
+    private WeeklyWeatherResponse weeklyWeatherResponse;
     private Bundle bundle;
     private Main main;
     private static Retrofit retrofit;
     public static DisposableObserver<CurrentWeatherResponse> request;
+    public static DisposableObserver<WeeklyWeatherResponse> weekRequest;
+    private ArrayList<Daily> dailyList;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        dailyList = new ArrayList<>();
         return inflater.inflate(R.layout.fragment_current_weekly_weather_tab, container, false);
     }
 
@@ -72,9 +76,6 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
         fetchWeeklyWeatherData(lat,lon,apikey);
         initView(view);
         setClickListener();
-
-
-
 
     }
 
@@ -110,8 +111,13 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
         Log.e("TAG", "initView_ADAP_RESP: " + currentWeatherResponse);
         bundle.putSerializable("current", currentWeatherResponse);
 
+        bundle.putSerializable("weekly", weeklyWeatherResponse);
+
         CurrentDayWeatherFragment currentDayWeatherFragment = new CurrentDayWeatherFragment();
         currentDayWeatherFragment.setArguments(bundle);
+
+        WeeklyWeatherFragment weeklyWeatherFragment = new WeeklyWeatherFragment();
+        weeklyWeatherFragment.setArguments(bundle);
     }
 
     private void setClickListener() {
@@ -130,10 +136,14 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
 
     }
 
-    public void getCurrentWaetherData() {
+    public void onWeeklyWeatherDataRetrieved(WeeklyWeatherResponse weeklyWeatherResponse) {
+        this.weeklyWeatherResponse = weeklyWeatherResponse;
+        dailyList.clear();
+        dailyList.addAll(weeklyWeatherResponse.getDaily());
+
+        //main = currentWeatherResponse.getMain();
 
     }
-
 
     public void fetchCurrentWeatherData(double lat, double lon, String apikey) {
 
@@ -187,29 +197,40 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
         retrofit = RetrofitFactory.getRetrofit();
         ApiService apiService = retrofit.create(ApiService.class);
         String unit = "metric";
+        int time = 1586468027;
 
-        request = apiService.getWeeklyWeatherResponse(lat, lon, apikey, unit)
+        weekRequest = apiService.getWeeklyWeatherResponse(lat, lon, time, apikey, unit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<WeeklyWeatherResponse>() {
                     @Override
                     public void onNext(@NotNull WeeklyWeatherResponse response) {
-                        if (response.getCod() == 200) {
+                        if (response != null) {
+                            onWeeklyWeatherDataRetrieved(response);
 
-                            AppCompatTextView feelslikeTemperature, humidity, wind, uvIndex, temperature,
+                            AppCompatTextView temperature,
                                     icon, description ;
-                            feelslikeTemperature = CurrentDayWeatherFragment.feelslikeTemperature;
-                            humidity = CurrentDayWeatherFragment.humidity;
-                            wind = CurrentDayWeatherFragment.wind;
-                            uvIndex = CurrentDayWeatherFragment.uvIndex;
-                            temperature = CurrentDayWeatherFragment.temperature;
-                            icon = CurrentDayWeatherFragment.icon;
-                            description = CurrentDayWeatherFragment.description;
-                            onCurrentWeatherDataRetrieved(response);
-                            sendDataToNextPage();
-                            Log.e("TAG", "onNext: " + response.getMain().getFeels_like());
-                            CurrentDayWeatherFragment.displayWeatherData(feelslikeTemperature, humidity,
-                                    wind, uvIndex, temperature, icon, description, response);
+
+                            temperature = WeeklyWeatherFragment.temperature;
+                            icon = WeeklyWeatherFragment.icon;
+                            description = WeeklyWeatherFragment.description;
+
+                            WeeklyWeatherFragment.displayWeatherData(temperature, icon, description, response, currentWeatherResponse);
+
+//                            AppCompatTextView feelslikeTemperature, humidity, wind, uvIndex, temperature,
+//                                    icon, description ;
+//                            feelslikeTemperature = CurrentDayWeatherFragment.feelslikeTemperature;
+//                            humidity = CurrentDayWeatherFragment.humidity;
+//                            wind = CurrentDayWeatherFragment.wind;
+//                            uvIndex = CurrentDayWeatherFragment.uvIndex;
+//                            temperature = CurrentDayWeatherFragment.temperature;
+//                            icon = CurrentDayWeatherFragment.icon;
+//                            description = CurrentDayWeatherFragment.description;
+//                            onCurrentWeatherDataRetrieved(response);
+//                            sendDataToNextPage();
+                            Log.e("TAG", "onNext: " + response.getTimezone());
+//                            CurrentDayWeatherFragment.displayWeatherData(feelslikeTemperature, humidity,
+//                                    wind, uvIndex, temperature, icon, description, response);
                         }
 
                     }

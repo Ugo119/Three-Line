@@ -18,6 +18,7 @@ public interface ApiService {
 
     @GET("onecall")
     Observable<WeeklyWeatherResponse> getWeeklyWeatherResponse(@Query("lat") double lat, @Query("lon") double lon,
+                                                         @Query("dt") int time,
                                                          @Query("appid") String apikey,
                                                          @Query("units") String metric);
 }

@@ -15,4 +15,5 @@
     <color name="colorLightGray">#E9E7E7</color>
     <color name="signup_pink">#BE1E3E</color>
     <color name="text_gray">#ABB2B9</color>
+    <color name="text_dark_gray">#566573</color>
 </resources>
