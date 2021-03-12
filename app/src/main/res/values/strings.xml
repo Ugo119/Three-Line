@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Weather App</string>
+    <string name="weather_app">Weather App</string>
+    <string name="today">Today</string>
+    <string name="weekly">Weekly</string>
+    <string name="Share">Share</string>
+    <string name="feels_like">Feels like</string>
+    <string name="humidity">Humidity</string>
+    <string name="wind">Wind</string>
+    <string name="uv_index">UV Index</string>
+</resources>
