@@ -16,10 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ugo.android.weatherapp.MainActivity;
 import com.ugo.android.weatherapp.R;
-import com.ugo.android.weatherapp.adapters.CountriesAdapter;
 import com.ugo.android.weatherapp.adapters.WeeklyWeatherAdapter;
 import com.ugo.android.weatherapp.interfaces.WeatherClickListener;
-import com.ugo.android.weatherapp.models.CityName;
+import com.ugo.android.weatherapp.models.City;
 import com.ugo.android.weatherapp.models.Daily;
 import com.ugo.android.weatherapp.models.MajorCities;
 import com.ugo.android.weatherapp.response.CurrentWeatherResponse;
@@ -39,7 +38,8 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
     private RecyclerView.LayoutManager mLayoutManager;
     WeeklyWeatherResponse weeklyWeatherResponse;
     MainActivity mainActivity;
-    CityName city;
+    City city;
+    String cityTemperature;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
 
     public void initView(View view) {
         mainActivity = (MainActivity) getActivity();
-        city = mainActivity.cityName;
+        city = mainActivity.city;
         Bundle bundle = getArguments();
         if (bundle != null) {
             currentWeatherResponse = (CurrentWeatherResponse) bundle.getSerializable("current");
@@ -65,10 +65,6 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
 
         }
 
-        Bundle cityBundle = getArguments();
-        if (cityBundle != null) {
-
-        }
 
         weeklyweatherRecyclerView = view.findViewById(R.id.weeklyweatherRecyclerView);
         weeklyWeatherAdapter = new WeeklyWeatherAdapter(weeklyWeatherResponse, majorCitiesList, dailyList);
@@ -84,6 +80,8 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
         description = view.findViewById(R.id.description);
 
         cityName.setText(city.getCityName());
+        cityTemperature = String.valueOf(city.getTemperature());
+        temperature.setText(cityTemperature);
 
 
 //        temperature.setText(String.valueOf((int) currentWeatherResponse.getMain().getTemp()) + "\u2103");

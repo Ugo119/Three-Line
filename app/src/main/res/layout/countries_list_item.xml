@@ -3,9 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/_60dp"
     android:layout_marginStart="@dimen/_8dp"
     android:layout_marginEnd="@dimen/_8dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -13,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/cairo"
-        android:textSize="@dimen/_18sp"
+        android:textSize="@dimen/_20sp"
         android:textColor="@color/black"
         tools:text="Lagos, Nigeria"/>
 

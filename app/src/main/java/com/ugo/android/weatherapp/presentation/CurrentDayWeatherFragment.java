@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ugo.android.weatherapp.MainActivity;
 import com.ugo.android.weatherapp.R;
-import com.ugo.android.weatherapp.models.CityName;
+import com.ugo.android.weatherapp.models.City;
 import com.ugo.android.weatherapp.models.MajorCities;
 import com.ugo.android.weatherapp.response.CurrentWeatherResponse;
 
@@ -22,7 +22,7 @@ public class CurrentDayWeatherFragment extends Fragment {
     description;
     CurrentWeatherResponse currentWeatherResponse;
     MajorCities majorCities;
-    private CityName city;
+    private City city;
     MainActivity mainActivity;
     @Nullable
     @Override
@@ -39,7 +39,7 @@ public class CurrentDayWeatherFragment extends Fragment {
 
     public void initView(View view) {
         mainActivity = (MainActivity) getActivity();
-        city = mainActivity.cityName;
+        city = mainActivity.city;
         Log.e("TAG", "initView_GETSAVED: " + city.getCityName());
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -49,6 +49,8 @@ public class CurrentDayWeatherFragment extends Fragment {
             //cityName.setText(city.getCityName());
 
             Log.e("TAG", "initView_MAIN: " + currentWeatherResponse.getMain());
+
+            city.setTemperature(currentWeatherResponse.getMain().getTemp());
         }
 
         feelslikeTemperature = view.findViewById(R.id.feelslikeTemperature);
@@ -83,6 +85,7 @@ public class CurrentDayWeatherFragment extends Fragment {
         wind.setText(String.valueOf(currentWeatherResponse.getWind().getSpeed()) + "km/h");
         uvIndex.setText(String.valueOf(currentWeatherResponse.getClouds().getAll()));
         temperature.setText(String.valueOf((int)currentWeatherResponse.getMain().getTemp()) + "\u2103");
+
         icon.setText(currentWeatherResponse.getWeather().get(0).getIcon());
         description.setText(currentWeatherResponse.getWeather().get(0).getDescription());
 

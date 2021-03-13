@@ -61,6 +61,18 @@ public class CountriesListFragment extends Fragment implements WeatherClickListe
         majorCitiesList.add(new MajorCities("New York", "United States", 41, -74));
         majorCitiesList.add(new MajorCities("Lagos", "Nigeria", 6, 3));
         majorCitiesList.add(new MajorCities("London", "United Kingdom", 52, -1));
+        majorCitiesList.add(new MajorCities("Abuja", "Nigeria", 9, 7));
+        majorCitiesList.add(new MajorCities("Dallas", "United States", 45, -123));
+        majorCitiesList.add(new MajorCities("Beijing", "China", 40, 116));
+        majorCitiesList.add(new MajorCities("Milan", "Italy", 45, 9));
+        majorCitiesList.add(new MajorCities("Istanbul", "Turkey", 41, 29));
+        majorCitiesList.add(new MajorCities("Moscow", "Russia", 56, 38));
+        majorCitiesList.add(new MajorCities("Shenzhen", "China", 23, 114));
+        majorCitiesList.add(new MajorCities("Paris", "France", 49, 2));
+        majorCitiesList.add(new MajorCities("Rio de Janeiro", "Brazil", -23, -43));
+        majorCitiesList.add(new MajorCities("New Delhi", "India", 29, 77));
+        majorCitiesList.add(new MajorCities("Johannesburg", "South Africa", -26, 28));
+        majorCitiesList.add(new MajorCities("Casablanca", "Morocco", 34, -8));
     }
 
     @Override
