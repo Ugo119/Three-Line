@@ -2,6 +2,7 @@ package com.ugo.android.weatherapp.network;
 
 
 import com.ugo.android.weatherapp.response.CurrentWeatherResponse;
+import com.ugo.android.weatherapp.response.UviResponse;
 import com.ugo.android.weatherapp.response.WeeklyWeatherResponse;
 
 import io.reactivex.Observable;
@@ -15,6 +16,11 @@ public interface ApiService {
     Observable<CurrentWeatherResponse> getCurrentWeatherResponse(@Query("lat") int lat, @Query("lon") int lon,
                                                                  @Query("appid") String apikey,
                                                                  @Query("units") String metric);
+
+    @GET("uvi")
+    Observable<UviResponse> getUviResponse(@Query("lat") int lat, @Query("lon") int lon,
+                                           @Query("appid") String apikey,
+                                           @Query("units") String metric);
 
     @GET("onecall")
     Observable<WeeklyWeatherResponse> getWeeklyWeatherResponse(@Query("lat") double lat, @Query("lon") double lon,

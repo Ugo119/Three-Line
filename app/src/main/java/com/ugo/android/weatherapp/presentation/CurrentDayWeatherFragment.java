@@ -16,11 +16,13 @@ import com.ugo.android.weatherapp.R;
 import com.ugo.android.weatherapp.models.City;
 import com.ugo.android.weatherapp.models.MajorCities;
 import com.ugo.android.weatherapp.response.CurrentWeatherResponse;
+import com.ugo.android.weatherapp.response.UviResponse;
 
 public class CurrentDayWeatherFragment extends Fragment {
     static AppCompatTextView feelslikeTemperature, humidity, wind, uvIndex, cityName, temperature, icon,
     description;
     CurrentWeatherResponse currentWeatherResponse;
+    UviResponse uviResponse;
     MajorCities majorCities;
     private City city;
     MainActivity mainActivity;
@@ -43,6 +45,7 @@ public class CurrentDayWeatherFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             currentWeatherResponse = (CurrentWeatherResponse) bundle.getSerializable("current");
+            uviResponse = (UviResponse) bundle.getSerializable("uvi");
             majorCities = (MajorCities) bundle.getSerializable("key");
             city.setTemperature(currentWeatherResponse.getMain().getTemp());
         }
@@ -61,19 +64,23 @@ public class CurrentDayWeatherFragment extends Fragment {
     }
 
     public static void displayWeatherData(AppCompatTextView feelslikeTemperature, AppCompatTextView humidity,
-                                   AppCompatTextView wind, AppCompatTextView uvIndex, AppCompatTextView temperature,
+                                   AppCompatTextView wind, AppCompatTextView temperature,
                                           AppCompatTextView icon, AppCompatTextView description, CurrentWeatherResponse currentWeatherResponse) {
 
         feelslikeTemperature.setText(String.valueOf((int) currentWeatherResponse.getMain().getFeels_like()) + "\u2103");
         humidity.setText(String.valueOf(currentWeatherResponse.getMain().getHumidity()));
         wind.setText(String.valueOf(currentWeatherResponse.getWind().getSpeed()) + "km/h");
-        uvIndex.setText(String.valueOf(currentWeatherResponse.getClouds().getAll()));
+
         temperature.setText(String.valueOf((int)currentWeatherResponse.getMain().getTemp()) + "\u2103");
 
         icon.setText(currentWeatherResponse.getWeather().get(0).getIcon());
         description.setText(currentWeatherResponse.getWeather().get(0).getDescription());
 
 
+    }
+
+    public static void displayUvidata(AppCompatTextView uvIndex, UviResponse uviResponse) {
+        uvIndex.setText(String.valueOf(uviResponse.getValue()));
     }
 
 }

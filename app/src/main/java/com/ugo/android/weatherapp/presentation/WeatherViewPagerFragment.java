@@ -22,6 +22,7 @@ import com.ugo.android.weatherapp.models.MajorCities;
 import com.ugo.android.weatherapp.network.ApiService;
 import com.ugo.android.weatherapp.network.RetrofitFactory;
 import com.ugo.android.weatherapp.response.CurrentWeatherResponse;
+import com.ugo.android.weatherapp.response.UviResponse;
 import com.ugo.android.weatherapp.response.WeeklyWeatherResponse;
 import com.ugo.android.weatherapp.utils.CustomViewPager;
 
@@ -48,16 +49,19 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
     private int lon;
     private String apikey;
     private CurrentWeatherResponse currentWeatherResponse;
+    private UviResponse uviResponse;
     private WeeklyWeatherResponse weeklyWeatherResponse;
     private Bundle bundle;
     private Main main;
     private static Retrofit retrofit;
     public static DisposableObserver<CurrentWeatherResponse> request;
+    public static DisposableObserver<UviResponse> uvirequest;
     public static DisposableObserver<WeeklyWeatherResponse> weekRequest;
     private ArrayList<Daily> dailyList;
     private City city;
     private static final String UNIT = "metric";
     private static final int TIME = 1586468027;
+    private double uviValue = 0.00;
 
 
     @Nullable
@@ -87,6 +91,7 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
         }
 
         fetchCurrentWeatherData(lat, lon, apikey);
+        fetchUviData(lat, lon, apikey);
         initView(view);
         setClickListener();
 
@@ -121,6 +126,7 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
 
     public void sendDataToNextPage() {
         bundle.putSerializable("current", currentWeatherResponse);
+        bundle.putSerializable("uvi", uviResponse);
         CurrentDayWeatherFragment currentDayWeatherFragment = new CurrentDayWeatherFragment();
         currentDayWeatherFragment.setArguments(bundle);
 
@@ -139,6 +145,12 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
     public void onCurrentWeatherDataRetrieved(CurrentWeatherResponse currentWeatherResponse) {
         this.currentWeatherResponse = currentWeatherResponse;
         main = currentWeatherResponse.getMain();
+
+    }
+
+    public void onUviRetrieved(UviResponse uviResponse) {
+        this.uviResponse = uviResponse;
+        uviValue = uviResponse.getValue();
 
     }
 
@@ -162,12 +174,12 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
                     public void onNext(@NotNull CurrentWeatherResponse response) {
                         if (response.getCod() == 200) {
                             city.setTemperature(response.getMain().getTemp());
-                            AppCompatTextView feelslikeTemperature, humidity, wind, uvIndex, temperature,
+                            AppCompatTextView feelslikeTemperature, humidity, wind, temperature,
                                     icon, description ;
                             feelslikeTemperature = CurrentDayWeatherFragment.feelslikeTemperature;
                             humidity = CurrentDayWeatherFragment.humidity;
                             wind = CurrentDayWeatherFragment.wind;
-                            uvIndex = CurrentDayWeatherFragment.uvIndex;
+                            //uvIndex = CurrentDayWeatherFragment.uvIndex;
                             temperature = CurrentDayWeatherFragment.temperature;
                             icon = CurrentDayWeatherFragment.icon;
                             description = CurrentDayWeatherFragment.description;
@@ -175,8 +187,45 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
                             sendDataToNextPage();
                             Log.e("TAG", "onNext: " + response.getMain().getFeels_like());
                             CurrentDayWeatherFragment.displayWeatherData(feelslikeTemperature, humidity,
-                                    wind, uvIndex, temperature, icon, description, response);
+                                    wind, temperature, icon, description, response);
                         }
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+    public void fetchUviData(int lat, int lon, String apikey) {
+
+        retrofit = RetrofitFactory.getRetrofit();
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        uvirequest = apiService.getUviResponse(lat, lon, apikey, UNIT)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<UviResponse>() {
+                    @Override
+                    public void onNext(@NotNull UviResponse response) {
+
+
+                            AppCompatTextView uvIndex;
+
+                            uvIndex = CurrentDayWeatherFragment.uvIndex;
+
+                            onUviRetrieved(response);
+                            sendDataToNextPage();
+
+                            CurrentDayWeatherFragment.displayUvidata(uvIndex, response);
+
 
                     }
                     @Override
