@@ -87,7 +87,6 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
         }
 
         fetchCurrentWeatherData(lat, lon, apikey);
-        //fetchWeeklyWeatherData(lat,lon,apikey);
         initView(view);
         setClickListener();
 
@@ -122,9 +121,6 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
 
     public void sendDataToNextPage() {
         bundle.putSerializable("current", currentWeatherResponse);
-
-        //bundle.putSerializable("weekly", weeklyWeatherResponse);
-
         CurrentDayWeatherFragment currentDayWeatherFragment = new CurrentDayWeatherFragment();
         currentDayWeatherFragment.setArguments(bundle);
 
@@ -134,8 +130,6 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
 
     private void setClickListener() {
     }
-
-
 
     @Override
     public void onClick(View v) {
@@ -183,9 +177,6 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
                             CurrentDayWeatherFragment.displayWeatherData(feelslikeTemperature, humidity,
                                     wind, uvIndex, temperature, icon, description, response);
                         }
-//                        if (response != null) {
-//
-//                        }
 
                     }
                     @Override
@@ -200,45 +191,5 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
                 });
 
     }
-
-    /*public void fetchWeeklyWeatherData(double lat, double lon, String apikey) {
-
-        retrofit = RetrofitFactory.getRetrofit();
-        ApiService apiService = retrofit.create(ApiService.class);
-
-        weekRequest = apiService.getWeeklyWeatherResponse(lat, lon, TIME, apikey, UNIT)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<WeeklyWeatherResponse>() {
-                    @Override
-                    public void onNext(@NotNull WeeklyWeatherResponse response) {
-                        if (response != null) {
-                            onWeeklyWeatherDataRetrieved(response);
-
-                            AppCompatTextView temperature,
-                                    icon, description ;
-
-                            temperature = WeeklyWeatherFragment.temperature;
-                            icon = WeeklyWeatherFragment.icon;
-                            description = WeeklyWeatherFragment.description;
-
-                            //WeeklyWeatherFragment.displayWeatherData(temperature, icon, description, response);
-
-                        }
-
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-
-    }*/
-
 
 }

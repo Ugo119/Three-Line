@@ -40,16 +40,10 @@ public class CurrentDayWeatherFragment extends Fragment {
     public void initView(View view) {
         mainActivity = (MainActivity) getActivity();
         city = mainActivity.city;
-        Log.e("TAG", "initView_GETSAVED: " + city.getCityName());
         Bundle bundle = getArguments();
         if (bundle != null) {
             currentWeatherResponse = (CurrentWeatherResponse) bundle.getSerializable("current");
             majorCities = (MajorCities) bundle.getSerializable("key");
-            Log.e("TAG", "initView_RESP: " + majorCities.getCityName());
-            //cityName.setText(city.getCityName());
-
-            Log.e("TAG", "initView_MAIN: " + currentWeatherResponse.getMain());
-
             city.setTemperature(currentWeatherResponse.getMain().getTemp());
         }
 
@@ -63,16 +57,6 @@ public class CurrentDayWeatherFragment extends Fragment {
         description = view.findViewById(R.id.description);
 
         cityName.setText(city.getCityName());
-
-
-
-//        if (currentWeatherResponse != null) {
-//            Log.e("TAG", "initView_TEMP: " + currentWeatherResponse.getMain().getTemp());
-//            temperature.setText(String.valueOf(currentWeatherResponse.getMain().getTemp()));
-//            humidity.setText(String.valueOf(currentWeatherResponse.getMain().getHumidity()));
-//            wind.setText(String.valueOf(currentWeatherResponse.getWind().getSpeed()));
-//            uvIndex.setText(String.valueOf(currentWeatherResponse.getClouds().getAll()));
-//        }
 
     }
 

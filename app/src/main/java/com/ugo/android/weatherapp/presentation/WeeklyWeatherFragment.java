@@ -70,9 +70,6 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
         lon = city.getLon();
         apikey = RetrofitFactory.API_KEY;
         bundle = getArguments();
-
-
-
         return inflater.inflate(R.layout.fragment_weekly_weather, container, false);
     }
 
@@ -91,20 +88,12 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
         weeklyweatherRecyclerView.setHasFixedSize(true);
         weeklyweatherRecyclerView.addItemDecoration(new DividerItemDecoration(weeklyweatherRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
         weeklyweatherRecyclerView.setAdapter(weeklyWeatherAdapter);
-        Log.e("TAG", "initView: Recyclerview created: " + weeklyweatherRecyclerView);
-
-
         temperature = view.findViewById(R.id.temperature);
         cityName = view.findViewById(R.id.cityName);
         icon = view.findViewById(R.id.icon);
         description = view.findViewById(R.id.description);
 
         cityName.setText(city.getCityName());
-//        cityTemperature = String.valueOf(currentWeatherResponse.getMain().getTemp());
-//        temperature.setText(cityTemperature);
-
-        //initializeRecyclerView(weeklyweatherRecyclerView);
-        //fetchWeeklyWeatherData(lat, lon, apikey);
     }
 
     private void initializeRecyclerView(RecyclerView recyclerView) {
@@ -117,28 +106,16 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
     }
 
     public void displayWeatherData(WeeklyWeatherResponse weeklyWeatherResponse) {
-        Log.e("TAG", "displayWeatherDataMISSING: " + weeklyWeatherResponse.getTimezone());
-
         if (bundle != null) {
             currentWeatherResponse = (CurrentWeatherResponse) bundle.getSerializable("current");
-            Log.e("TAG", "displayWeatherDataMMM: " + currentWeatherResponse.getMain().getTemp());
-
-            //weeklyWeatherResponse = (WeeklyWeatherResponse) bundle.getSerializable("weekly");
             majorCities = (MajorCities) bundle.getSerializable("key");
-
             cityTemperature = String.valueOf(currentWeatherResponse.getMain().getTemp());
-
         }
 
-
         temperature.setText(String.valueOf(Math.round(weeklyWeatherResponse.getCurrent().getTemp())) + "\u2103");
-
-
-        Log.e("TAG", "initializeRecyclerView: " + dailyList.get(0).getClouds());
     }
 
     public void fetchWeeklyWeatherData(double lat, double lon, String apikey) {
-
         retrofit = RetrofitFactory.getRetrofit();
         ApiService apiService = retrofit.create(ApiService.class);
 
@@ -148,14 +125,10 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
                 .subscribeWith(new DisposableObserver<WeeklyWeatherResponse>() {
                     @Override
                     public void onNext(@NotNull WeeklyWeatherResponse response) {
-                        Log.e("TAG", "onNext: AAAAH" + response.getCurrent().getTemp() );
 
                         onWeeklyWeatherDataRetrieved(response);
 
                         displayWeatherData(response);
-
-
-
                     }
                     @Override
                     public void onError(Throwable e) {
@@ -174,11 +147,7 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
         this.weeklyWeatherResponse = weeklyWeatherResponse;
         dailyList.clear();
         dailyList.addAll(weeklyWeatherResponse.getDaily());
-
-        //dailyList = weeklyWeatherResponse.getDaily();
-
         weeklyWeatherAdapter.setItems(dailyList);
-        Log.e("TAG", "onWeeklyWeatherDataRetrieved_MIZZIN: " + dailyList.get(0).getPressure());
 
     }
 

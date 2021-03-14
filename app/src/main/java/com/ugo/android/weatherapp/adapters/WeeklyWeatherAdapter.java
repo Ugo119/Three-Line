@@ -18,6 +18,7 @@ import com.ugo.android.weatherapp.response.WeeklyWeatherResponse;
 import com.ugo.android.weatherapp.utils.DateUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdapter.WeeklyWeatherViewHolder> {
     private ArrayList<MajorCities> majorCitiesList;
@@ -54,6 +55,8 @@ public class WeeklyWeatherAdapter extends RecyclerView.Adapter<WeeklyWeatherAdap
     @Override
     public void onBindViewHolder(@NonNull WeeklyWeatherViewHolder holder, int position) {
         String dayForSunrise = DateUtil.getDayFromEpoch(dailyList.get(position).getDt());
+        Date date = DateUtil.getDate(dailyList.get(position).getDt());
+        String day = DateUtil.getDayOfWeek(date);
         holder.sunrise.setText(dayForSunrise);
         holder.temperature.setText(String.format("%s,%s", Math.round(dailyList.get(position).getTemp().getMax())+"\u2103", "/" + Math.round(dailyList.get(position).getTemp().getMin())+"\u2103"));
         holder.description.setText(dailyList.get(position).getWeather().get(0).getDescription());

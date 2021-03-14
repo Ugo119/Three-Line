@@ -30,7 +30,7 @@ public class CountriesListFragment extends Fragment implements WeatherClickListe
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //return super.onCreateView(inflater, container, savedInstanceState);
+
         mainActivity = (MainActivity) getActivity();
         getList();
         return inflater.inflate(R.layout.fragment_countries, container, false);
