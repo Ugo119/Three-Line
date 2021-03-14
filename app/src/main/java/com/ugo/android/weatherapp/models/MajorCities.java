@@ -7,10 +7,10 @@ import java.io.Serializable;
 public class MajorCities implements Serializable {
     private String cityName;
     private String countryName;
-    private int latitude;
-    private int longitude;
+    private double latitude;
+    private double longitude;
 
-    public MajorCities(String cityName, String countryName, int latitude, int longitude) {
+    public MajorCities(String cityName, String countryName, double latitude, double longitude) {
         this.cityName = cityName;
         this.countryName = countryName;
         this.latitude = latitude;
@@ -34,19 +34,19 @@ public class MajorCities implements Serializable {
         this.countryName = countryName;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(int longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 }

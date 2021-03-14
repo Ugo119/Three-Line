@@ -56,23 +56,23 @@ public class CountriesListFragment extends Fragment implements WeatherClickListe
 
     public void getList() {
         majorCitiesList = new ArrayList<>();
-        majorCitiesList.add(new MajorCities("Tokyo", "Japan", 36, 140));
-        majorCitiesList.add(new MajorCities("Mumbai", "India", 19, 73));
-        majorCitiesList.add(new MajorCities("New York", "United States", 41, -74));
-        majorCitiesList.add(new MajorCities("Lagos", "Nigeria", 6, 3));
-        majorCitiesList.add(new MajorCities("London", "United Kingdom", 52, -1));
-        majorCitiesList.add(new MajorCities("Abuja", "Nigeria", 9, 7));
-        majorCitiesList.add(new MajorCities("Dallas", "United States", 45, -123));
-        majorCitiesList.add(new MajorCities("Beijing", "China", 40, 116));
-        majorCitiesList.add(new MajorCities("Milan", "Italy", 45, 9));
-        majorCitiesList.add(new MajorCities("Istanbul", "Turkey", 41, 29));
-        majorCitiesList.add(new MajorCities("Moscow", "Russia", 56, 38));
-        majorCitiesList.add(new MajorCities("Shenzhen", "China", 23, 114));
-        majorCitiesList.add(new MajorCities("Paris", "France", 49, 2));
-        majorCitiesList.add(new MajorCities("Rio de Janeiro", "Brazil", -23, -43));
-        majorCitiesList.add(new MajorCities("New Delhi", "India", 29, 77));
-        majorCitiesList.add(new MajorCities("Johannesburg", "South Africa", -26, 28));
-        majorCitiesList.add(new MajorCities("Casablanca", "Morocco", 34, -8));
+        majorCitiesList.add(new MajorCities("Tokyo", "Japan", 35.689712, 139.692212));
+        majorCitiesList.add(new MajorCities("Mumbai", "India", 18.966712, 72.833312));
+        majorCitiesList.add(new MajorCities("New York", "United States", 40.694312, -73.924912));
+        majorCitiesList.add(new MajorCities("Lagos", "Nigeria", 6.451012, 3.410102));
+        majorCitiesList.add(new MajorCities("London", "United Kingdom", 51.507212, -0.127512));
+        majorCitiesList.add(new MajorCities("Abuja", "Nigeria", 9.055612, 7.491412));
+        majorCitiesList.add(new MajorCities("Dallas", "United States", 44.922212, -123.313112));
+        majorCitiesList.add(new MajorCities("Beijing", "China", 39.905101, 116.391412));
+        majorCitiesList.add(new MajorCities("Milan", "Italy", 45.466912, 9.191012));
+        majorCitiesList.add(new MajorCities("Istanbul", "Turkey", 41.010101, 28.960312));
+        majorCitiesList.add(new MajorCities("Moscow", "Russia", 55.755812, 37.617812));
+        majorCitiesList.add(new MajorCities("Shenzhen", "China", 22.535101, 114.054101));
+        majorCitiesList.add(new MajorCities("Paris", "France", 48.856612, 2.352212));
+        majorCitiesList.add(new MajorCities("Rio de Janeiro", "Brazil", -22.908312, -43.196412));
+        majorCitiesList.add(new MajorCities("New Delhi", "India", 28.710101, 77.210101));
+        majorCitiesList.add(new MajorCities("Johannesburg", "South Africa", -26.204412, 28.041612));
+        majorCitiesList.add(new MajorCities("Casablanca", "Morocco", 33.599212, -7.621012));
     }
 
     @Override

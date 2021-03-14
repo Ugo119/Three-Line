@@ -15,7 +15,7 @@ public class Daily {
     private int wind_deg;
     private ArrayList<Weather> weather;
     private int clouds;
-    private int pop;
+    private double pop;
     private double uvi;
 
     public int getDt() {
@@ -114,11 +114,11 @@ public class Daily {
         this.clouds = clouds;
     }
 
-    public int getPop() {
+    public double getPop() {
         return pop;
     }
 
-    public void setPop(int pop) {
+    public void setPop(double pop) {
         this.pop = pop;
     }
 

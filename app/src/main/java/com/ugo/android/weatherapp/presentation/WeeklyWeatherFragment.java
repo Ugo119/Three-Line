@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,10 +22,19 @@ import com.ugo.android.weatherapp.interfaces.WeatherClickListener;
 import com.ugo.android.weatherapp.models.City;
 import com.ugo.android.weatherapp.models.Daily;
 import com.ugo.android.weatherapp.models.MajorCities;
+import com.ugo.android.weatherapp.network.ApiService;
+import com.ugo.android.weatherapp.network.RetrofitFactory;
 import com.ugo.android.weatherapp.response.CurrentWeatherResponse;
 import com.ugo.android.weatherapp.response.WeeklyWeatherResponse;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Retrofit;
 
 public class WeeklyWeatherFragment extends Fragment implements WeatherClickListener {
     static AppCompatTextView cityName, temperature, icon,
@@ -40,9 +50,29 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
     MainActivity mainActivity;
     City city;
     String cityTemperature;
+    private double lat;
+    private double lon;
+    private static final String UNIT = "metric";
+    private static final String EXCLUDE = "minutely,hourly";
+    private String apikey;
+    private Retrofit retrofit;
+    public static DisposableObserver<WeeklyWeatherResponse> weekRequest;
+    Bundle bundle;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        dailyList = new ArrayList<>();
+        mainActivity = (MainActivity) getActivity();
+        city = mainActivity.city;
+        lat = city.getLat();
+        lon = city.getLon();
+        apikey = RetrofitFactory.API_KEY;
+        bundle = getArguments();
+
+
+
         return inflater.inflate(R.layout.fragment_weekly_weather, container, false);
     }
 
@@ -50,29 +80,19 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        fetchWeeklyWeatherData(lat, lon, apikey);
     }
 
     public void initView(View view) {
-        mainActivity = (MainActivity) getActivity();
-        city = mainActivity.city;
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            currentWeatherResponse = (CurrentWeatherResponse) bundle.getSerializable("current");
-
-            weeklyWeatherResponse = (WeeklyWeatherResponse) bundle.getSerializable("weekly");
-            majorCities = (MajorCities) bundle.getSerializable("key");
-            //cityName.setText(majorCities.getCityName());
-
-        }
-
-
-        weeklyweatherRecyclerView = view.findViewById(R.id.weeklyweatherRecyclerView);
-        weeklyWeatherAdapter = new WeeklyWeatherAdapter(weeklyWeatherResponse, majorCitiesList, dailyList);
+        weeklyweatherRecyclerView = view.findViewById(R.id.weekRecyclerView);
+        weeklyWeatherAdapter = new WeeklyWeatherAdapter(requireContext(), weeklyWeatherResponse, dailyList);
         mLayoutManager = new LinearLayoutManager(getActivity());
         weeklyweatherRecyclerView.setLayoutManager(mLayoutManager);
         weeklyweatherRecyclerView.setHasFixedSize(true);
         weeklyweatherRecyclerView.addItemDecoration(new DividerItemDecoration(weeklyweatherRecyclerView.getContext(), DividerItemDecoration.VERTICAL));
         weeklyweatherRecyclerView.setAdapter(weeklyWeatherAdapter);
+        Log.e("TAG", "initView: Recyclerview created: " + weeklyweatherRecyclerView);
+
 
         temperature = view.findViewById(R.id.temperature);
         cityName = view.findViewById(R.id.cityName);
@@ -80,55 +100,87 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
         description = view.findViewById(R.id.description);
 
         cityName.setText(city.getCityName());
-        cityTemperature = String.valueOf(city.getTemperature());
-        temperature.setText(cityTemperature);
+//        cityTemperature = String.valueOf(currentWeatherResponse.getMain().getTemp());
+//        temperature.setText(cityTemperature);
+
+        //initializeRecyclerView(weeklyweatherRecyclerView);
+        //fetchWeeklyWeatherData(lat, lon, apikey);
+    }
+
+    private void initializeRecyclerView(RecyclerView recyclerView) {
+        fetchWeeklyWeatherData(lat, lon, apikey);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity));
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setHasFixedSize(true);
+        weeklyWeatherAdapter = new WeeklyWeatherAdapter(requireContext(), weeklyWeatherResponse, dailyList);
+        recyclerView.setAdapter(weeklyWeatherAdapter);
+    }
+
+    public void displayWeatherData(WeeklyWeatherResponse weeklyWeatherResponse) {
+        Log.e("TAG", "displayWeatherDataMISSING: " + weeklyWeatherResponse.getTimezone());
+
+        if (bundle != null) {
+            currentWeatherResponse = (CurrentWeatherResponse) bundle.getSerializable("current");
+            Log.e("TAG", "displayWeatherDataMMM: " + currentWeatherResponse.getMain().getTemp());
+
+            //weeklyWeatherResponse = (WeeklyWeatherResponse) bundle.getSerializable("weekly");
+            majorCities = (MajorCities) bundle.getSerializable("key");
+
+            cityTemperature = String.valueOf(currentWeatherResponse.getMain().getTemp());
+
+        }
 
 
-//        temperature.setText(String.valueOf((int) currentWeatherResponse.getMain().getTemp()) + "\u2103");
-//        icon.setText(currentWeatherResponse.getWeather().get(0).getIcon());
-//        description.setText(currentWeatherResponse.getWeather().get(0).getDescription());
+        temperature.setText(String.valueOf(Math.round(weeklyWeatherResponse.getCurrent().getTemp())) + "\u2103");
 
-        //cityName.setText(majorCities.getCityName());
 
-//        if (currentWeatherResponse != null) {
-//            Log.e("TAG", "initView_TEMP: " + currentWeatherResponse.getMain().getTemp());
-//            temperature.setText(String.valueOf(currentWeatherResponse.getMain().getTemp()));
-//            humidity.setText(String.valueOf(currentWeatherResponse.getMain().getHumidity()));
-//            wind.setText(String.valueOf(currentWeatherResponse.getWind().getSpeed()));
-//            uvIndex.setText(String.valueOf(currentWeatherResponse.getClouds().getAll()));
-//        }
+        Log.e("TAG", "initializeRecyclerView: " + dailyList.get(0).getClouds());
+    }
+
+    public void fetchWeeklyWeatherData(double lat, double lon, String apikey) {
+
+        retrofit = RetrofitFactory.getRetrofit();
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        weekRequest = apiService.getWeeklyWeatherResponse(lat, lon, EXCLUDE, apikey, UNIT)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<WeeklyWeatherResponse>() {
+                    @Override
+                    public void onNext(@NotNull WeeklyWeatherResponse response) {
+                        Log.e("TAG", "onNext: AAAAH" + response.getCurrent().getTemp() );
+
+                        onWeeklyWeatherDataRetrieved(response);
+
+                        displayWeatherData(response);
+
+
+
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 
-    public static void displayWeatherData(AppCompatTextView temperature, AppCompatTextView icon,
-                                          AppCompatTextView description, WeeklyWeatherResponse weeklyWeatherResponse) {
+    public void onWeeklyWeatherDataRetrieved(WeeklyWeatherResponse weeklyWeatherResponse) {
+        this.weeklyWeatherResponse = weeklyWeatherResponse;
+        dailyList.clear();
+        dailyList.addAll(weeklyWeatherResponse.getDaily());
 
-//        feelslikeTemperature.setText(String.valueOf((int) currentWeatherResponse.getMain().getFeels_like()) + "\u2103");
-//        humidity.setText(String.valueOf(currentWeatherResponse.getMain().getHumidity()));
-//        wind.setText(String.valueOf(currentWeatherResponse.getWind().getSpeed()) + "km/h");
-//        uvIndex.setText(String.valueOf(currentWeatherResponse.getClouds().getAll()));
-//        temperature.setText(String.valueOf((int) curren.getMain().getTemp()) + "\u2103");
-//        icon.setText(currentWeatherResponse.getWeather().get(0).getIcon());
-//        description.setText(currentWeatherResponse.getWeather().get(0).getDescription());
+        //dailyList = weeklyWeatherResponse.getDaily();
 
-
+        weeklyWeatherAdapter.setItems(dailyList);
+        Log.e("TAG", "onWeeklyWeatherDataRetrieved_MIZZIN: " + dailyList.get(0).getPressure());
 
     }
-
-    /*public static void displayWeatherData(AppCompatTextView feelslikeTemperature, AppCompatTextView humidity,
-                                          AppCompatTextView wind, AppCompatTextView uvIndex, AppCompatTextView temperature,
-                                          AppCompatTextView icon, AppCompatTextView description, CurrentWeatherResponse currentWeatherResponse) {
-
-        feelslikeTemperature.setText(String.valueOf((int) currentWeatherResponse.getMain().getFeels_like()) + "\u2103");
-        humidity.setText(String.valueOf(currentWeatherResponse.getMain().getHumidity()));
-        wind.setText(String.valueOf(currentWeatherResponse.getWind().getSpeed()) + "km/h");
-        uvIndex.setText(String.valueOf(currentWeatherResponse.getClouds().getAll()));
-        temperature.setText(String.valueOf((int)currentWeatherResponse.getMain().getTemp()) + "\u2103");
-        icon.setText(currentWeatherResponse.getWeather().get(0).getIcon());
-        description.setText(currentWeatherResponse.getWeather().get(0).getDescription());
-
-
-    }*/
 
     @Override
     public void onCityClicked(MajorCities majorCities) {

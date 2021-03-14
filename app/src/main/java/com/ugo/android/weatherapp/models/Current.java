@@ -13,7 +13,7 @@ public class Current {
     private double dew_point;
     private int clouds;
     private int visibility;
-    private int wind_speed;
+    private double wind_speed;
     private int wind_deg;
     private ArrayList<Weather> weather;
 
@@ -97,11 +97,11 @@ public class Current {
         this.visibility = visibility;
     }
 
-    public int getWind_speed() {
+    public double getWind_speed() {
         return wind_speed;
     }
 
-    public void setWind_speed(int wind_speed) {
+    public void setWind_speed(double wind_speed) {
         this.wind_speed = wind_speed;
     }
 

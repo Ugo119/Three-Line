@@ -12,13 +12,13 @@ import retrofit2.http.QueryMap;
 
 public interface ApiService {
     @GET("weather")
-    Observable<CurrentWeatherResponse> getCurrentWeatherResponse(@Query("lat") double lat, @Query("lon") double lon,
+    Observable<CurrentWeatherResponse> getCurrentWeatherResponse(@Query("lat") int lat, @Query("lon") int lon,
                                                                  @Query("appid") String apikey,
                                                                  @Query("units") String metric);
 
     @GET("onecall")
     Observable<WeeklyWeatherResponse> getWeeklyWeatherResponse(@Query("lat") double lat, @Query("lon") double lon,
-                                                         @Query("dt") int time,
+                                                         @Query("exclude") String exclude,
                                                          @Query("appid") String apikey,
                                                          @Query("units") String metric);
 }
