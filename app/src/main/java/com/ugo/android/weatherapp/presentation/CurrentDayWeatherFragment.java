@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 
@@ -19,8 +20,9 @@ import com.ugo.android.weatherapp.response.CurrentWeatherResponse;
 import com.ugo.android.weatherapp.response.UviResponse;
 
 public class CurrentDayWeatherFragment extends Fragment {
-    static AppCompatTextView feelslikeTemperature, humidity, wind, uvIndex, cityName, temperature, icon,
+    static AppCompatTextView feelslikeTemperature, humidity, wind, uvIndex, cityName, temperature,
     description;
+    static AppCompatImageView icon;
     CurrentWeatherResponse currentWeatherResponse;
     UviResponse uviResponse;
     MajorCities majorCities;
@@ -65,7 +67,7 @@ public class CurrentDayWeatherFragment extends Fragment {
 
     public static void displayWeatherData(AppCompatTextView feelslikeTemperature, AppCompatTextView humidity,
                                    AppCompatTextView wind, AppCompatTextView temperature,
-                                          AppCompatTextView icon, AppCompatTextView description, CurrentWeatherResponse currentWeatherResponse) {
+                                          AppCompatImageView icon, AppCompatTextView description, CurrentWeatherResponse currentWeatherResponse) {
 
         feelslikeTemperature.setText(String.valueOf((int) currentWeatherResponse.getMain().getFeels_like()) + "\u2103");
         humidity.setText(String.valueOf(currentWeatherResponse.getMain().getHumidity()));
@@ -73,7 +75,63 @@ public class CurrentDayWeatherFragment extends Fragment {
 
         temperature.setText(String.valueOf((int)currentWeatherResponse.getMain().getTemp()) + "\u2103");
 
-        icon.setText(currentWeatherResponse.getWeather().get(0).getIcon());
+        String iconText = currentWeatherResponse.getWeather().get(0).getIcon();
+
+        switch (iconText) {
+            case "01d":
+                icon.setImageResource(R.drawable._01d);
+                break;
+            case "01n":
+                icon.setImageResource(R.drawable._01n);
+                break;
+            case "02d":
+                icon.setImageResource(R.drawable._02d);
+                break;
+            case "02n":
+                icon.setImageResource(R.drawable._02n);
+            case "03n":
+                icon.setImageResource(R.drawable._03n);
+                break;
+            case "03d":
+                icon.setImageResource(R.drawable._03d);
+                break;
+            case "04d":
+                icon.setImageResource(R.drawable._04d);
+                break;
+            case "04n":
+                icon.setImageResource(R.drawable._04n);
+                break;
+            case "09d":
+                icon.setImageResource(R.drawable._09d);
+                break;
+            case "09n":
+                icon.setImageResource(R.drawable._09n);
+                break;
+            case "10d":
+                icon.setImageResource(R.drawable._10d);
+                break;
+            case "10n":
+                icon.setImageResource(R.drawable._10n);
+            case "11d":
+                icon.setImageResource(R.drawable._11d);
+                break;
+            case "11n":
+                icon.setImageResource(R.drawable._11n);
+                break;
+            case "13d":
+                icon.setImageResource(R.drawable._13d);
+                break;
+            case "13n":
+                icon.setImageResource(R.drawable._13n);
+                break;
+            case "50d":
+                icon.setImageResource(R.drawable._50d);
+                break;
+            case "50n":
+                icon.setImageResource(R.drawable._50n);
+                break;
+        }
+
         description.setText(currentWeatherResponse.getWeather().get(0).getDescription());
 
 

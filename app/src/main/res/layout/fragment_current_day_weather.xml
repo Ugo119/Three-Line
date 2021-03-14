@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:background="@drawable/weather_page">
+        android:background="@drawable/weather_background">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/cityName"
@@ -55,16 +55,14 @@
             android:text="14 C"
             android:textSize="55sp"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/cairo_light"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/_40dp"
-            android:layout_marginEnd="@dimen/_30dp"
-            android:textColor="@color/white"/>
+            android:layout_marginTop="@dimen/_20dp"
+            android:layout_marginEnd="@dimen/_10dp"/>
 
     </RelativeLayout>
 

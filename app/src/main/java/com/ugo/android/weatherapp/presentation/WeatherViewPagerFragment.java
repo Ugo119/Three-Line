@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 
@@ -175,7 +176,8 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
                         if (response.getCod() == 200) {
                             city.setTemperature(response.getMain().getTemp());
                             AppCompatTextView feelslikeTemperature, humidity, wind, temperature,
-                                    icon, description ;
+                                     description ;
+                            AppCompatImageView icon;
                             feelslikeTemperature = CurrentDayWeatherFragment.feelslikeTemperature;
                             humidity = CurrentDayWeatherFragment.humidity;
                             wind = CurrentDayWeatherFragment.wind;
@@ -185,7 +187,7 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
                             description = CurrentDayWeatherFragment.description;
                             onCurrentWeatherDataRetrieved(response);
                             sendDataToNextPage();
-                            Log.e("TAG", "onNext: " + response.getMain().getFeels_like());
+
                             CurrentDayWeatherFragment.displayWeatherData(feelslikeTemperature, humidity,
                                     wind, temperature, icon, description, response);
                         }
