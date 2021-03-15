@@ -63,6 +63,10 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
     private static final String UNIT = "metric";
     private static final int TIME = 1586468027;
     private double uviValue = 0.00;
+    private int[] tabIcons = {
+            R.drawable.day_tab_icon,
+            R.drawable.week_tab_icon
+    };
 
 
     @Nullable
@@ -95,6 +99,7 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
         fetchUviData(lat, lon, apikey);
         initView(view);
         setClickListener();
+        setupTabicons();
 
     }
 
@@ -123,6 +128,11 @@ public class WeatherViewPagerFragment extends Fragment implements View.OnClickLi
         viewPager.setAdapter(weatherViewPagerAdapter);
 
 
+    }
+
+    private void setupTabicons() {
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
     }
 
     public void sendDataToNextPage() {
