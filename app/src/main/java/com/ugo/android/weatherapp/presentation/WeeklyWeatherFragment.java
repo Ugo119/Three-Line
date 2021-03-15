@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -37,8 +38,9 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class WeeklyWeatherFragment extends Fragment implements WeatherClickListener {
-    static AppCompatTextView cityName, temperature, icon,
+    static AppCompatTextView cityName, temperature,
             description;
+    static AppCompatImageView icon;
     CurrentWeatherResponse currentWeatherResponse;
     MajorCities majorCities;
     private ArrayList<MajorCities> majorCitiesList;
@@ -111,8 +113,64 @@ public class WeeklyWeatherFragment extends Fragment implements WeatherClickListe
             majorCities = (MajorCities) bundle.getSerializable("key");
             cityTemperature = String.valueOf(currentWeatherResponse.getMain().getTemp());
         }
-
+        description.setText(weeklyWeatherResponse.getDaily().get(0).getWeather().get(0).getDescription());
         temperature.setText(String.valueOf(Math.round(weeklyWeatherResponse.getCurrent().getTemp())) + "\u2103");
+        String iconText = weeklyWeatherResponse.getCurrent().getWeather().get(0).getIcon();
+
+        switch (iconText) {
+            case "01d":
+                icon.setImageResource(R.drawable._01d);
+                break;
+            case "01n":
+                icon.setImageResource(R.drawable._01n);
+                break;
+            case "02d":
+                icon.setImageResource(R.drawable._02d);
+                break;
+            case "02n":
+                icon.setImageResource(R.drawable._02n);
+            case "03n":
+                icon.setImageResource(R.drawable._03n);
+                break;
+            case "03d":
+                icon.setImageResource(R.drawable._03d);
+                break;
+            case "04d":
+                icon.setImageResource(R.drawable._04d);
+                break;
+            case "04n":
+                icon.setImageResource(R.drawable._04n);
+                break;
+            case "09d":
+                icon.setImageResource(R.drawable._09d);
+                break;
+            case "09n":
+                icon.setImageResource(R.drawable._09n);
+                break;
+            case "10d":
+                icon.setImageResource(R.drawable._10d);
+                break;
+            case "10n":
+                icon.setImageResource(R.drawable._10n);
+            case "11d":
+                icon.setImageResource(R.drawable._11d);
+                break;
+            case "11n":
+                icon.setImageResource(R.drawable._11n);
+                break;
+            case "13d":
+                icon.setImageResource(R.drawable._13d);
+                break;
+            case "13n":
+                icon.setImageResource(R.drawable._13n);
+                break;
+            case "50d":
+                icon.setImageResource(R.drawable._50d);
+                break;
+            case "50n":
+                icon.setImageResource(R.drawable._50n);
+                break;
+        }
     }
 
     public void fetchWeeklyWeatherData(double lat, double lon, String apikey) {
